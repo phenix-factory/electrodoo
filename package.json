@@ -1,7 +1,7 @@
 {
   "name": "electrodoo",
   "version": "0.0.1",
-  "description": "",
+  "description": "Odoo discuss client",
   "main": "index.js",
   "scripts": {
     "start": "electron-forge start",
