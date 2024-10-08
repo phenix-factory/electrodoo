@@ -1,11 +1,15 @@
 "use strict";
-const { app, BrowserWindow, globalShortcut, shell } = require('electron');
+const { app, BrowserWindow, globalShortcut, shell, ipcMain } = require('electron');
+const path = require('node:path');
 
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
         nodeIntegration: false,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js')
+        }
     });
     const encoded = encodeURI("http://localhost:8069/discuss/channel/1?debug=assets");
     win.loadURL(`http://localhost:8069/web/login?redirect=${encoded}`);
@@ -13,18 +17,19 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
+    let pushToTalkKey;
+    ipcMain.on("getPushToTalkKey", (event, key) => {
+        pushToTalkKey = key;
+    });
+    // ipcMain.on("public_page_loaded", () => console.log("wololo", pushToTalkKey));
     const win = createWindow();
 
-    win.on("mail:public_page_ready", () => console.log("wololo"));
-
-    // win.webContents.on("mail:public_page_ready", () => {
-    //     const pushToTalkKey = win.webContents.executeJavaScript('window.odoo.__WOWL_DEBUG__');
-    //     console.log(pushToTalkKey);
-    // });
-
-    globalShortcut.register('F1', () => {
-        win.webContents.sendInputEvent({ keyCode: "F1", type: "keydown" });
-    });
+    // Globally listen to the push to talk key and pass the event to Odoo
+    if (pushToTalkKey) {
+        globalShortcut.register(pushToTalkKey, () => {
+            win.webContents.sendInputEvent({ keyCode: pushToTalkKey, type: "keydown" });
+        });
+    }
 
     // open target="_blank" link with the default browser
     win.webContents.setWindowOpenHandler(({ url }) => {
@@ -33,6 +38,7 @@ app.whenReady().then(() => {
     });
 });
 
+// From electron documentation
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
