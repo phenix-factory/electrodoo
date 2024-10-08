@@ -1,20 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-        <meta
-            http-equiv="Content-Security-Policy"
-            content="default-src 'self'; script-src 'self'"
+
+<head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <!-- <meta
+                    http-equiv="Content-Security-Policy"
+                    content="default-src 'self'; script-src 'self'"
+                /> -->
+    <title>Odoo Discuss</title>
+</head>
+
+<body>
+    <h1>Odoo Discuss</h1>
+    <form id="form">
+        <input
+            id="odooUrl"
+            type="url"
+            placeholder="https://odoo.com"
+            value="http://localhost:8069/"
+            required
         />
-        <meta
-            http-equiv="X-Content-Security-Policy"
-            content="default-src 'self'; script-src 'self'"
-        />
-        <title>Hello from Electron renderer!</title>
-    </head>
-    <body>
-        <h1>Hello from Electron renderer!</h1>
-        <p>👋</p>
-    </body>
+        <input type="submit" value="Open odoo" />
+    </form>
+    <script type="text/javascript">
+        const form = document.getElementById("form");
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const odooUrl = document.getElementById("odooUrl").value;
+            window.electronAPI.openOdoo(odooUrl);
+        });
+    </script>
+</body>
+
 </html>

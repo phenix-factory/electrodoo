@@ -11,31 +11,36 @@ const createWindow = () => {
             preload: path.join(__dirname, 'preload.js')
         }
     });
-    const encoded = encodeURI("http://localhost:8069/discuss/channel/1?debug=assets");
-    win.loadURL(`http://localhost:8069/web/login?redirect=${encoded}`);
+    win.loadFile(path.join(__dirname, "index.html"));
     return win;
 };
 
 app.whenReady().then(() => {
-    let pushToTalkKey;
-    ipcMain.on("getPushToTalkKey", (event, key) => {
-        pushToTalkKey = key;
-    });
-    // ipcMain.on("public_page_loaded", () => console.log("wololo", pushToTalkKey));
     const win = createWindow();
-
-    // Globally listen to the push to talk key and pass the event to Odoo
-    if (pushToTalkKey) {
+    let pushToTalkKey;
+    // ipcMain.on("public_page_loaded", () => console.log("wololo", pushToTalkKey));
+    ipcMain.on("odooUrl", (event, url) => {
+        const encoded = encodeURI(`${url}/discuss/channel/1?debug=assets`);
+        win.loadURL(`${url}/web/login?redirect=${encoded}`);
+    });
+    ipcMain.on("getPushToTalkKey", (event, key) => {
+        pushToTalkKey = key.split(".")[3];
+        // Globally listen to the push to talk key and pass the event to Odoo
         globalShortcut.register(pushToTalkKey, () => {
+            console.log("wololo");
             win.webContents.sendInputEvent({ keyCode: pushToTalkKey, type: "keydown" });
         });
-    }
+    });
 
     // open target="_blank" link with the default browser
     win.webContents.setWindowOpenHandler(({ url }) => {
         shell.openExternal(url);
         return { action: 'deny' };
     });
+});
+
+app.on("will-quit", () => {
+    globalShortcut.unregisterAll();
 });
 
 // From electron documentation
