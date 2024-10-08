@@ -6,8 +6,8 @@ const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
-        nodeIntegration: false,
         webPreferences: {
+            nodeIntegration: false,
             preload: path.join(__dirname, 'preload.js')
         }
     });
@@ -17,18 +17,16 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
     const win = createWindow();
-    let pushToTalkKey;
     // ipcMain.on("public_page_loaded", () => console.log("wololo", pushToTalkKey));
     ipcMain.on("odooUrl", (event, url) => {
         const encoded = encodeURI(`${url}/discuss/channel/1?debug=assets`);
         win.loadURL(`${url}/web/login?redirect=${encoded}`);
     });
     ipcMain.on("getPushToTalkKey", (event, key) => {
-        pushToTalkKey = key.split(".")[3];
+        const pushToTalkKey = key.split(".")[3];
         // Globally listen to the push to talk key and pass the event to Odoo
         globalShortcut.register(pushToTalkKey, () => {
-            console.log("wololo");
-            win.webContents.sendInputEvent({ keyCode: pushToTalkKey, type: "keydown" });
+            win.webContents.sendInputEvent({ keyCode: pushToTalkKey, type: "keyDown" });
         });
     });
 
