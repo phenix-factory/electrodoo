@@ -17,7 +17,6 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
     const win = createWindow();
-    // ipcMain.on("public_page_loaded", () => console.log("wololo", pushToTalkKey));
     ipcMain.on("odooUrl", (event, url) => {
         const encoded = encodeURI(`${url}/discuss/channel/1?debug=assets`);
         win.loadURL(`${url}/web/login?redirect=${encoded}`);
