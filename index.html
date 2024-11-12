@@ -4,15 +4,12 @@
 <head>
     <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <!-- <meta
-                    http-equiv="Content-Security-Policy"
-                    content="default-src 'self'; script-src 'self'"
-                /> -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
     <title>Odoo Discuss</title>
 </head>
 
 <body>
-    <h1>Odoo Discuss</h1>
+    <h1>Odoo Discuss app</h1>
     <form id="form">
         <input
             id="odooUrl"
@@ -23,14 +20,7 @@
         />
         <input type="submit" value="Open odoo" />
     </form>
-    <script type="text/javascript">
-        const form = document.getElementById("form");
-        form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const odooUrl = document.getElementById("odooUrl").value;
-            window.electronAPI.openOdoo(odooUrl);
-        });
-    </script>
+    <script src="./renderer.js"></script>
 </body>
 
 </html>
