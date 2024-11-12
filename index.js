@@ -25,7 +25,7 @@ app.whenReady().then(() => {
         const pushToTalkKey = key.split(".")[3];
         // Globally listen to the push to talk key and pass the event to Odoo
         globalShortcut.register(pushToTalkKey, () => {
-            win.webContents.sendInputEvent({ keyCode: pushToTalkKey, type: "keyDown" });
+            win.webContents.send("push-to-talk");
         });
     });
 
