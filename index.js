@@ -28,7 +28,6 @@ app.whenReady().then(() => {
             win.webContents.send("push-to-talk");
         });
     });
-
     // open target="_blank" link with the default browser
     win.webContents.setWindowOpenHandler(({ url }) => {
         shell.openExternal(url);
