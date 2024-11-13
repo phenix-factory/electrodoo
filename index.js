@@ -1,6 +1,6 @@
 "use strict";
-const { app, BrowserWindow, globalShortcut, shell, ipcMain } = require('electron');
-const path = require('node:path');
+const { app, BrowserWindow, globalShortcut, shell, ipcMain } = require("electron");
+const path = require("node:path");
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -8,7 +8,7 @@ const createWindow = () => {
         height: 600,
         webPreferences: {
             nodeIntegration: false,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, "preload.js")
         }
     });
     win.loadFile(path.join(__dirname, "index.html"));
