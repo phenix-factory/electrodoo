@@ -18,7 +18,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
     const win = createWindow();
     ipcMain.on("odooUrl", (event, url) => {
-        const encoded = encodeURI(`${url}/discuss/channel/`);
+        const encoded = encodeURI(`${url}/discuss/public/`);
         win.loadURL(`${url}/web/login?redirect=${encoded}`);
     });
     ipcMain.on("getPushToTalkKey", (event, key) => {
